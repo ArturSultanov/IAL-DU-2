@@ -93,7 +93,7 @@ void bst_insert(bst_node_t **tree, char key, int value) {
 		}
 	}
 
-	if (node_found = false){ // The node with looking kay was not found.
+	if (node_found == false){ // The node with looking kay was not found.
 		/*  New structure of abstract tree '**tree'.
 				 root
 				 /  \
@@ -406,15 +406,17 @@ void bst_postorder(bst_node_t *tree, bst_items_t *items) {
 
     bst_leftmost_postorder(tree, &stack, &stack_go_from_left);
 
+	bool go_from_left;
+
 	while (!stack_bst_empty(&stack))
 	{
 		tree = stack_bst_top(&stack);
 		stack_bst_pop(&stack);
 		
-		bool *go_from_left = stack_bool_top(&stack_go_from_left);
+		go_from_left = stack_bool_top(&stack_go_from_left);
 		stack_bool_pop(&stack_go_from_left);
 
-		if (*go_from_left == true)
+		if (go_from_left == true)
 		{
 			stack_bst_push(&stack, tree);
 			stack_bool_push(&stack_go_from_left, false);
