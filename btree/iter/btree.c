@@ -395,4 +395,34 @@ void bst_leftmost_postorder(bst_node_t *tree, stack_bst_t *to_visit,
  */
 void bst_postorder(bst_node_t *tree, bst_items_t *items) {
 	// left -> right -> root
+
+	// Stack of nodes.
+	stack_bst_t stack;
+    stack_bst_init(&stack);
+
+	// Stack of bool values, if the node was visited.
+    stack_bool_t stack_go_from_left;
+    stack_bool_init(&stack_go_from_left);
+
+    bst_leftmost_postorder(tree, &stack, &stack_go_from_left);
+
+	while (!stack_bst_empty(&stack))
+	{
+		tree = stack_bst_top(&stack);
+		stack_bst_pop(&stack);
+		
+		bool *go_from_left = stack_bool_top(&stack_go_from_left);
+		stack_bool_pop(&stack_go_from_left);
+
+		if (*go_from_left == true)
+		{
+			stack_bst_push(&stack, tree);
+			stack_bool_push(&stack_go_from_left, false);
+			bst_leftmost_postorder(tree->right, &stack, &stack_go_from_left);
+		}
+		else
+		{
+			bst_add_node_to_items(tree, items);
+		}
+	}
 }
