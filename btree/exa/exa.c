@@ -110,7 +110,23 @@ void bst_to_array(bst_node_t *node, bst_items_t *items) {
     bst_to_array(node->right, items);
 }
 
-
+bst_node_t* array_to_bst(int start, int end, bst_node_t **nodes) {
+    // Base case
+    if (start > end)
+        return NULL;
+    
+    // Get the middle element and make it root
+    int mid = (start + end) / 2;
+    bst_node_t *root = nodes[mid];
+    
+    // Recursively construct the left subtree
+    root->left = array_to_bst(start, mid - 1, nodes);
+    
+    // Recursively construct the right subtree
+    root->right = array_to_bst(mid + 1, end, nodes);
+    
+    return root;
+}
 
 void bst_balance(bst_node_t **tree) {
     if (tree == NULL)
@@ -122,17 +138,19 @@ void bst_balance(bst_node_t **tree) {
         return;
     }
     
-    // Count the total number of nodes in the BST
+    // Count the total number of nodes in the tree.
     int total_nodes = bst_count_nodes(*tree);
 
-    // Initialize the array to hold the nodes
+    // Initialize the array to hold the nodes.
     bst_items_t items;
     // bst_init_items(&items);
+
     items.capacity = total_nodes;
     items.size = 0;
     items.nodes = malloc(items.capacity * sizeof(bst_node_t*));
+    
+    // Memory allocation error.
     if (items.nodes == NULL) {
-        // Handle the memory allocation error
         return;
     }
     
