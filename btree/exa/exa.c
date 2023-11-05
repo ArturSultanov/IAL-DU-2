@@ -144,16 +144,4 @@ void bst_balance(bst_node_t **tree) {
     
     // Free the temporary array memory
     free(items.nodes);
-
-    // мы сначала проходимся по дереву и добавляем все его элементы в массив inorder
-    // потом мы создаем новое дерево и вставляем в него элементы из массива
-    // Если высота отличается - меняем порядок вставки элементов
-    // потом мы удаляем старое дерево и присваиваем новое дерево старому
-    //
-    
-    // Dispose the old tree.
-    // bst_dispose(tree);
-
-    // Assign the new tree to the old tree.
-    // *tree = new_tree;
 }
