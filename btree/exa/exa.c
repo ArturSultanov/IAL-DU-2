@@ -32,6 +32,45 @@
  * Pro implementaci si můžete v tomto souboru nadefinovat vlastní pomocné funkce.
 */
 void letter_count(bst_node_t **tree, char *input) {
+    // Initialize the tree.
+    bst_init(tree);
+
+    // Iterate over the input string.
+    for (int symbol = 0; input[symbol] != '\\0'; symbol++)
+    {
+        char key;
+        
+        if ((input[symbol] >= 'a' && input[symbol] <= 'z')|| // Check if the symbol is lowercase letter.
+            (input[symbol] >= '0' && input[symbol] <= '9')|| // Or the symbol is a number.
+            (input[symbol] == ' '))                          // or the symbol is a space.
+        {
+            key = input[symbol];
+        }
+        // Check if the symbol is uppercase letter.
+        else if  (input[symbol] >= 'A' && input[symbol] <= 'Z')
+        {
+            key = input[symbol] + 32;
+        }
+        // Check if the letter is a special character.
+        else
+        {
+            key = '_';
+        }
+        
+        // Search for the key in the tree.
+        int value = 0;
+        if (bst_search(*tree, key, &value))
+        {
+            // If the key is in the tree, increment the value.
+            value++;
+            bst_insert(tree, key, value);
+        }
+        else
+        {
+            // If the key is not in the tree, insert it.
+            bst_insert(tree, key, 1);
+        }
+    }
 }
 
 
@@ -46,5 +85,75 @@ void letter_count(bst_node_t **tree, char *input) {
  *  
  * Pro implementaci si můžete v tomto souboru nadefinovat vlastní pomocné funkce. Není nutné, aby funkce fungovala *in situ* (in-place).
 */
+
+int bst_count_nodes(bst_node_t *node) {
+    if (node == NULL) {
+        return 0;
+    }
+    return bst_count_nodes(node->left) + bst_count_nodes(node->right) + 1;
+}
+
+void bst_to_array(bst_node_t *node, bst_items_t *items) {
+    // Base case
+    if (node == NULL)
+        return;
+    
+    // Recursively convert the left subtree
+    bst_to_array(node->left, items);
+    
+    // Add the current node to the array of items
+    if (items->size < items->capacity) {
+        items->nodes[items->size++] = node;
+    }
+    
+    // Recursively convert the right subtree
+    bst_to_array(node->right, items);
+}
+
+
+
 void bst_balance(bst_node_t **tree) {
+    if (tree == NULL)
+    {
+        return;
+    }
+    if (*tree == NULL)
+    {
+        return;
+    }
+    
+    // Count the total number of nodes in the BST
+    int total_nodes = bst_count_nodes(*tree);
+
+    // Initialize the array to hold the nodes
+    bst_items_t items;
+    // bst_init_items(&items);
+    items.capacity = total_nodes;
+    items.size = 0;
+    items.nodes = malloc(items.capacity * sizeof(bst_node_t*));
+    if (items.nodes == NULL) {
+        // Handle the memory allocation error
+        return;
+    }
+    
+    // Convert the BST to a sorted array of nodes
+    bst_to_array(*tree, &items);
+    
+    // Build a balanced BST from the sorted array of nodes
+    *tree = array_to_bst(0, items.size - 1, items.nodes);
+    
+    // Free the temporary array memory
+    free(items.nodes);
+
+    // мы сначала проходимся по дереву и добавляем все его элементы в массив inorder
+    // потом мы создаем новое дерево и вставляем в него элементы из массива
+    // Если высота отличается - меняем порядок вставки элементов
+    // потом мы удаляем старое дерево и присваиваем новое дерево старому
+    //
+    
+    // Dispose the old tree.
+    // bst_dispose(tree);
+
+    // Assign the new tree to the old tree.
+    // *tree = new_tree;
 }
