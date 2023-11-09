@@ -69,7 +69,19 @@ bool bst_search(bst_node_t *tree, char key, int *value) {
  * Funkci implementujte iterativně bez použití vlastních pomocných funkcí.
  */
 void bst_insert(bst_node_t **tree, char key, int value) {
-    if (*tree == NULL) {
+    // if (*tree == NULL) {
+    //     return;
+    // }
+
+	if (*tree == NULL) {
+        *tree = (bst_node_t *)malloc(sizeof(bst_node_t));
+        if (*tree == NULL) {
+            return;
+        }
+        (*tree)->key = key;
+        (*tree)->value = value;
+        (*tree)->left = NULL;
+        (*tree)->right = NULL;
         return;
     }
 

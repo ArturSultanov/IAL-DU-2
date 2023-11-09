@@ -233,8 +233,8 @@ void bst_preorder(bst_node_t *tree, bst_items_t *items) {
 	}
 	// root->left->right
 	bst_add_node_to_items(tree, items);
-	bst_add_node_to_items(tree->left, items);
-	bst_add_node_to_items(tree->right, items);
+	bst_preorder(tree->left, items);
+	bst_preorder(tree->right, items);
 }
 
 /*
@@ -250,9 +250,9 @@ void bst_inorder(bst_node_t *tree, bst_items_t *items) {
 		return;
 	}
 	// left->root->right
-	bst_add_node_to_items(tree->left, items);
+	bst_inorder(tree->left, items);
 	bst_add_node_to_items(tree, items);
-	bst_add_node_to_items(tree->right, items);
+	bst_inorder(tree->right, items);
 }
 
 /*
@@ -268,7 +268,7 @@ void bst_postorder(bst_node_t *tree, bst_items_t *items) {
 		return;
 	}
 	// left->right->root
-	bst_add_node_to_items(tree->left, items);
-	bst_add_node_to_items(tree->right, items);
+	bst_postorder(tree->left, items);
+	bst_postorder(tree->right, items);
 	bst_add_node_to_items(tree, items);
 }

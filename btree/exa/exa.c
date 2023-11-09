@@ -36,7 +36,7 @@ void letter_count(bst_node_t **tree, char *input) {
     bst_init(tree);
 
     // Iterate over the input string.
-    for (int symbol = 0; input[symbol] != '\\0'; symbol++)
+    for (int symbol = 0; input[symbol] != '\0'; symbol++)
     {
         char key;
         
